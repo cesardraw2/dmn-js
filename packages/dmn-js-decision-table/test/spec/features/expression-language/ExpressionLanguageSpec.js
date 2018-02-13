@@ -11,24 +11,24 @@ import {
 
 import simpleXML from '../../simple.dmn';
 
-import CoreModule from 'lib/core';
-import InteractionEventsModule from 'table-js/lib/features/interaction-events';
-import RulesEditorModule from 'lib/features/rules/editor';
 import ContextMenuModule from 'lib/features/context-menu';
+import CoreModule from 'lib/core';
 import ExpressionLanguageModule from 'lib/features/expression-language';
-
+import InteractionEventsModule from 'table-js/lib/features/interaction-events';
 import ModelingModule from 'lib/features/modeling';
+import RulesEditorModule from 'lib/features/rules/editor';
+
 
 describe('expression language', function() {
 
   beforeEach(bootstrapModeler(simpleXML, {
     modules: [
-      CoreModule,
-      InteractionEventsModule,
-      RulesEditorModule,
       ContextMenuModule,
+      CoreModule,
+      ExpressionLanguageModule,
+      InteractionEventsModule,
       ModelingModule,
-      ExpressionLanguageModule
+      RulesEditorModule
     ]
   }));
 
@@ -47,13 +47,7 @@ describe('expression language', function() {
   }
 
 
-  // TODO(philippfromme): fix test
-  // dmn-js-decision-table modeling doesn't override table-js modeling in injector
-  it.only('should edit expression language', inject(function(elementRegistry, injector, modeling) {
-
-    console.log(injector._providers);
-
-    debugger
+  it('should edit expression language', inject(function(elementRegistry) {
 
     // given
     const select = openContextMenu('inputEntry1');
@@ -62,7 +56,8 @@ describe('expression language', function() {
     triggerChangeEvent(select, 'javascript');
 
     // then
-
+    expect(elementRegistry.get('inputEntry1').businessObject.expressionLanguage)
+      .to.equal('javascript');
   }));
 
 });
